@@ -84,14 +84,14 @@ function Navbar() {
         initial={{ y: -60 }}
         animate={{ y: 0 }}
         transition={{ duration: .4 }}
-        className={`sticky top-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? "bg-white/80 backdrop-blur-xl shadow-md"
-            : "bg-transparent"
-        }`}
+        className={`sticky top-0 z-50 transition-all duration-300 ${scrolled
+          ? "bg-white/80 backdrop-blur-xl shadow-md"
+          : "bg-transparent"
+
+          }`}
       >
 
-        <div className="max-w-7xl mx-auto flex items-center justify-between h-20 px-6 lg:px-10">
+        <div className="max-w-7xl mx-auto flex items-center justify-between h-16 sm:h-20">
 
           {/* Logo */}
 
@@ -105,7 +105,7 @@ function Navbar() {
 
             <div>
 
-              <h1 className="text-2xl font-bold">
+              <h1 className="text-xl sm:text-2xl font-bold">
 
                 PDFly
 
@@ -121,7 +121,7 @@ function Navbar() {
 
           </div>
 
-                    {/* Desktop Menu */}
+          {/* Desktop Menu */}
 
           <div className="hidden lg:flex items-center gap-8 bg-white rounded-full px-8 py-3 shadow-lg">
 
@@ -166,7 +166,7 @@ function Navbar() {
 
           <button
             onClick={() => setMenuOpen(true)}
-            className="lg:hidden text-4xl"
+            className="lg:hidden text-3xl"
           >
             <HiMenuAlt3 />
           </button>
@@ -182,7 +182,7 @@ function Navbar() {
         {menuOpen && (
 
           <>
-                      {/* Background Blur */}
+            {/* Background Blur */}
 
             <motion.div
               initial={{ opacity: 0 }}
@@ -203,7 +203,7 @@ function Navbar() {
                 stiffness: 260,
                 damping: 28,
               }}
-              className="fixed top-0 right-0 h-screen w-80 bg-white z-50 shadow-2xl flex flex-col"
+              className="fixed top-0 right-0 h-screen w-[85%] max-w-[320px] bg-white z-50 shadow-2xl flex flex-col"
             >
 
               {/* Header */}
@@ -278,7 +278,7 @@ function Navbar() {
 
               </div>
 
-                            {/* Bottom Section */}
+              {/* Bottom Section */}
 
               <div className="border-t p-6">
 
