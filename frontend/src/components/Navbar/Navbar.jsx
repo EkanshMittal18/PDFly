@@ -81,14 +81,8 @@ function Navbar() {
     <>
 
       <motion.nav
-        initial={{ y: -60 }}
+        initial={false}
         animate={{ y: 0 }}
-        transition={{ duration: .4 }}
-        className={`sticky top-0 z-50 transition-all duration-300 ${scrolled
-          ? "bg-white/80 backdrop-blur-xl shadow-md"
-          : "bg-transparent"
-
-          }`}
       >
 
         <div className="max-w-7xl mx-auto flex items-center justify-between h-16 sm:h-20">
@@ -189,7 +183,7 @@ function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setMenuOpen(false)}
-              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
+              className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40"
             />
 
             {/* Sidebar */}
@@ -203,12 +197,12 @@ function Navbar() {
                 stiffness: 260,
                 damping: 28,
               }}
-              className="fixed top-0 right-0 h-screen w-[85%] max-w-[320px] bg-white z-50 shadow-2xl flex flex-col"
+              className="fixed top-0 right-0 h-screen w-[85%] max-w-[340px] bg-white/15 backdrop-blur-3xl border-l border-white/20 shadow-[0_0_40px_rgba(0,0,0,.25)] z-50 flex flex-col"
             >
 
               {/* Header */}
 
-              <div className="flex items-center justify-between p-6 border-b">
+              <div className="flex items-center justify-between p-6 border-b border-white/20">
 
                 <div className="flex items-center gap-3">
 
@@ -234,7 +228,7 @@ function Navbar() {
 
                 <button
                   onClick={() => setMenuOpen(false)}
-                  className="text-4xl hover:text-purple-600 transition"
+                  className="text-3xl p-2 rounded-full hover:bg-white/20 transition"
                 >
                   <HiX />
                 </button>
@@ -261,7 +255,7 @@ function Navbar() {
                     transition={{
                       delay: index * 0.08,
                     }}
-                    className="flex items-center gap-4 p-4 rounded-2xl text-gray-700 font-medium hover:bg-purple-50 hover:text-purple-600 transition-all duration-300"
+                    className="flex items-center gap-4 p-4 rounded-2xl text-gray-800 font-medium hover:bg-white/20 hover:text-purple-600 transition-all duration-300"
                   >
 
                     <span className="text-xl">
@@ -285,7 +279,7 @@ function Navbar() {
                 <motion.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.96 }}
-                  className="w-full py-3 rounded-full border border-gray-300 font-medium hover:border-purple-600 hover:text-purple-600 transition"
+                  className="w-full py-3 rounded-full border border-white/30 bg-white/10 backdrop-blur-xl font-medium hover:bg-white/20 transition"
                 >
                   Login
                 </motion.button>
@@ -293,7 +287,7 @@ function Navbar() {
                 <motion.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.96 }}
-                  className="w-full py-3 mt-4 rounded-full bg-gradient-to-r from-purple-600 to-violet-500 text-white font-semibold shadow-lg"
+                  className="w-full py-3 mt-4 rounded-full bg-gradient-to-r from-purple-600 via-violet-500 to-fuchsia-500 text-white font-semibold shadow-xl"
                 >
                   Get Started
                 </motion.button>
