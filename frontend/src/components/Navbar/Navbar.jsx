@@ -1,163 +1,329 @@
-import { FaFilePdf, FaHome, FaTools } from "react-icons/fa";
-import { HiMenu, HiX } from "react-icons/hi";
-import { MdOutlineAutoAwesome } from "react-icons/md";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  HiMenuAlt3,
+  HiX,
+} from "react-icons/hi";
+
+import {
+  FaFilePdf,
+  FaHome,
+  FaTools,
+} from "react-icons/fa";
+
+import { MdAutoAwesome } from "react-icons/md";
 import { IoPricetagOutline } from "react-icons/io5";
 import { RiQuestionnaireLine } from "react-icons/ri";
-import { useState, useEffect } from "react";
-import { HiMenu, HiX } from "react-icons/hi";
-import { useState } from "react";
+
 function Navbar() {
+
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "auto";
+
+    const handleScroll = () => {
+
+      setScrolled(window.scrollY > 20);
+
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () =>
+      window.removeEventListener(
+        "scroll",
+        handleScroll
+      );
+
+  }, []);
+
+  useEffect(() => {
+
+    document.body.style.overflow =
+      menuOpen ? "hidden" : "auto";
 
     return () => {
       document.body.style.overflow = "auto";
     };
+
   }, [menuOpen]);
+
+  const navItems = [
+    {
+      title: "Home",
+      href: "#",
+      icon: <FaHome />,
+    },
+    {
+      title: "Tools",
+      href: "#",
+      icon: <FaTools />,
+    },
+    {
+      title: "AI Features",
+      href: "#",
+      icon: <MdAutoAwesome />,
+    },
+    {
+      title: "How It Works",
+      href: "#",
+      icon: <RiQuestionnaireLine />,
+    },
+    {
+      title: "Pricing",
+      href: "#",
+      icon: <IoPricetagOutline />,
+    },
+  ];
+
   return (
-    <nav className="sticky top-0 z-50 w-full py-4 px-12 flex items-center justify-between bg-[#F8F5FF]/80 backdrop-blur-xl">
+    <>
 
-      {/* Logo */}
-      <div className="flex items-center gap-2">
-        <FaFilePdf className="text-purple-600 text-2xl" />
-
-        <h1 className="text-2xl font-bold text-purple-700">
-          PDFly
-        </h1>
-      </div>
-
-      <button
-        onClick={() => setMenuOpen(!menuOpen)}
-        className="lg:hidden text-3xl"
+      <motion.nav
+        initial={{ y: -60 }}
+        animate={{ y: 0 }}
+        transition={{ duration: .4 }}
+        className={`sticky top-0 z-50 transition-all duration-300 ${
+          scrolled
+            ? "bg-white/80 backdrop-blur-xl shadow-md"
+            : "bg-transparent"
+        }`}
       >
-        {menuOpen ? <HiX /> : <HiMenu />}
-      </button>
 
-      {/* Menu */}
-      <div className="hidden lg:flex items-center gap-10 font-medium bg-white px-8 py-2 rounded-full shadow-[0_8px_30px_rgba(0,0,0,0.08)]">
-        <a
-          href="#"
-          className="text-purple-600 font-semibold bg-purple-50 px-3 py-1.5 rounded-full">
-          Home
-        </a>
+        <div className="max-w-7xl mx-auto flex items-center justify-between h-20 px-6 lg:px-10">
 
-        <a href="#" className="hover:text-purple-600 transition-all duration-300">
-          Tools
-        </a>
+          {/* Logo */}
 
-        <a href="#" className="hover:text-purple-600 transition-all duration-300">
-          AI Features
-        </a>
+          <div className="flex items-center gap-3 cursor-pointer">
 
-        <a href="#" className="hover:text-purple-600 transition-all duration-300">
-          How It Works
-        </a>
+            <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-purple-600 to-violet-500 flex items-center justify-center text-white text-xl">
 
-        <a href="#" className="hover:text-purple-600 transition-all duration-300">
-          Pricing
-        </a>
-      </div>
-
-      {/* Buttons */}
-      <div className="hidden lg:flex gap-4">
-        <button className="px-5 py-2 border rounded-full">
-          Login
-        </button>
-
-        <button className="px-5 py-2 bg-purple-600 text-white rounded-full">
-          Get Started
-        </button>
-      </div>
-      <>
-        <div
-          className={`fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity duration-300 ${menuOpen
-              ? "opacity-100 visible"
-              : "opacity-0 invisible"
-            }`}
-          onClick={() => setMenuOpen(false)}
-        />
-
-        <div
-          className={`fixed top-0 right-0 h-screen w-80 bg-white z-50 shadow-2xl transition-transform duration-300 ${menuOpen
-              ? "translate-x-0"
-              : "translate-x-full"
-            }`}
-        >
-          <div className="p-6 flex justify-between items-center border-b">
-
-            <div className="flex items-center gap-2">
-
-              <FaFilePdf className="text-purple-600 text-2xl" />
-
-              <div>
-
-                <h2 className="font-bold text-xl">
-                  PDFly
-                </h2>
-
-                <p className="text-xs text-gray-500">
-                  AI Powered PDF Tools
-                </p>
-
-              </div>
+              <FaFilePdf />
 
             </div>
 
-            <button
-              onClick={() => setMenuOpen(false)}
-              className="text-3xl"
+            <div>
+
+              <h1 className="text-2xl font-bold">
+
+                PDFly
+
+              </h1>
+
+              <p className="text-xs text-gray-500">
+
+                AI Powered PDF Tools
+
+              </p>
+
+            </div>
+
+          </div>
+
+                    {/* Desktop Menu */}
+
+          <div className="hidden lg:flex items-center gap-8 bg-white rounded-full px-8 py-3 shadow-lg">
+
+            {navItems.map((item) => (
+
+              <motion.a
+                key={item.title}
+                href={item.href}
+                whileHover={{ y: -2 }}
+                className="relative text-gray-700 font-medium hover:text-purple-600 transition-all duration-300 after:absolute after:left-0 after:-bottom-2 after:h-[2px] after:w-0 after:bg-purple-600 after:transition-all after:duration-300 hover:after:w-full"
+              >
+                {item.title}
+              </motion.a>
+
+            ))}
+
+          </div>
+
+          {/* Desktop Buttons */}
+
+          <div className="hidden lg:flex items-center gap-4">
+
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: .96 }}
+              className="px-6 py-2.5 rounded-full border border-gray-300 hover:border-purple-600 hover:text-purple-600 transition"
             >
-              <HiX />
-            </button>
-
-          </div>
-
-          <div className="p-6 flex flex-col gap-2">
-
-            <a className="flex items-center gap-4 p-4 rounded-xl hover:bg-purple-50 transition">
-              <FaHome />
-              Home
-            </a>
-
-            <a className="flex items-center gap-4 p-4 rounded-xl hover:bg-purple-50 transition">
-              <FaTools />
-              Tools
-            </a>
-
-            <a className="flex items-center gap-4 p-4 rounded-xl hover:bg-purple-50 transition">
-              <MdOutlineAutoAwesome />
-              AI Features
-            </a>
-
-            <a className="flex items-center gap-4 p-4 rounded-xl hover:bg-purple-50 transition">
-              <RiQuestionnaireLine />
-              How It Works
-            </a>
-
-            <a className="flex items-center gap-4 p-4 rounded-xl hover:bg-purple-50 transition">
-              <IoPricetagOutline />
-              Pricing
-            </a>
-
-          </div>
-
-          <div className="absolute bottom-0 left-0 w-full p-6 border-t">
-
-            <button className="w-full border rounded-full py-3 font-medium">
               Login
-            </button>
+            </motion.button>
 
-            <button className="w-full mt-3 bg-purple-600 text-white rounded-full py-3 font-medium">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: .96 }}
+              className="px-6 py-2.5 rounded-full bg-gradient-to-r from-purple-600 to-violet-500 text-white shadow-lg font-semibold"
+            >
               Get Started
-            </button>
+            </motion.button>
 
           </div>
+
+          {/* Mobile Menu Button */}
+
+          <button
+            onClick={() => setMenuOpen(true)}
+            className="lg:hidden text-4xl"
+          >
+            <HiMenuAlt3 />
+          </button>
 
         </div>
-      </>
-    </nav>
+
+      </motion.nav>
+
+      {/* Mobile Sidebar */}
+
+      <AnimatePresence>
+
+        {menuOpen && (
+
+          <>
+                      {/* Background Blur */}
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMenuOpen(false)}
+              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
+            />
+
+            {/* Sidebar */}
+
+            <motion.div
+              initial={{ x: 350 }}
+              animate={{ x: 0 }}
+              exit={{ x: 350 }}
+              transition={{
+                type: "spring",
+                stiffness: 260,
+                damping: 28,
+              }}
+              className="fixed top-0 right-0 h-screen w-80 bg-white z-50 shadow-2xl flex flex-col"
+            >
+
+              {/* Header */}
+
+              <div className="flex items-center justify-between p-6 border-b">
+
+                <div className="flex items-center gap-3">
+
+                  <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-purple-600 to-violet-500 flex items-center justify-center text-white text-xl">
+
+                    <FaFilePdf />
+
+                  </div>
+
+                  <div>
+
+                    <h2 className="font-bold text-xl">
+                      PDFly
+                    </h2>
+
+                    <p className="text-xs text-gray-500">
+                      AI Powered PDF Tools
+                    </p>
+
+                  </div>
+
+                </div>
+
+                <button
+                  onClick={() => setMenuOpen(false)}
+                  className="text-4xl hover:text-purple-600 transition"
+                >
+                  <HiX />
+                </button>
+
+              </div>
+
+              {/* Navigation */}
+
+              <div className="flex-1 px-6 py-8 flex flex-col gap-3">
+
+                {navItems.map((item, index) => (
+
+                  <motion.a
+                    key={item.title}
+                    href={item.href}
+                    initial={{
+                      opacity: 0,
+                      x: 30,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      x: 0,
+                    }}
+                    transition={{
+                      delay: index * 0.08,
+                    }}
+                    className="flex items-center gap-4 p-4 rounded-2xl text-gray-700 font-medium hover:bg-purple-50 hover:text-purple-600 transition-all duration-300"
+                  >
+
+                    <span className="text-xl">
+
+                      {item.icon}
+
+                    </span>
+
+                    {item.title}
+
+                  </motion.a>
+
+                ))}
+
+              </div>
+
+                            {/* Bottom Section */}
+
+              <div className="border-t p-6">
+
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.96 }}
+                  className="w-full py-3 rounded-full border border-gray-300 font-medium hover:border-purple-600 hover:text-purple-600 transition"
+                >
+                  Login
+                </motion.button>
+
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.96 }}
+                  className="w-full py-3 mt-4 rounded-full bg-gradient-to-r from-purple-600 to-violet-500 text-white font-semibold shadow-lg"
+                >
+                  Get Started
+                </motion.button>
+
+                <div className="mt-8 text-center">
+
+                  <p className="text-sm text-gray-500">
+                    PDFly v1.0
+                  </p>
+
+                  <p className="text-xs text-gray-400 mt-2">
+                    Made with ❤️ by PDFly
+                  </p>
+
+                </div>
+
+              </div>
+
+            </motion.div>
+
+          </>
+
+        )}
+
+      </AnimatePresence>
+
+    </>
+
   );
+
 }
 
 export default Navbar;
