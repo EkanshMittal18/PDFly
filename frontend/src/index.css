@@ -9,3 +9,34 @@ body,
 * {
   box-sizing: border-box;
 }
+
+.marquee{
+    width:100%;
+    overflow-x:hidden;
+    overflow-y:visible;
+    position:relative;
+    padding:20px 0;
+}
+
+.marquee-content{
+  display:flex;
+  gap:2rem;
+  width:max-content;
+  animation:marquee 45s linear infinite;
+}
+
+.marquee:hover .marquee-content{
+  animation-play-state:paused;
+}
+
+@keyframes marquee{
+
+  from{
+    transform:translateX(0);
+  }
+
+  to{
+    transform:translateX(-50%);
+  }
+
+}
