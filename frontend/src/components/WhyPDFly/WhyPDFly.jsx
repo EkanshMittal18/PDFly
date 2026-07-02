@@ -4,7 +4,7 @@ import { whyData } from "./whyData";
 
 function WhyPDFly() {
   return (
-    <section className="relative overflow-hidden py-24 px-5 lg:px-12">
+    <section className="relative overflow-hidden pt-8 pb-24 px-5 lg:px-12">
 
       {/* Background Blur */}
 
@@ -19,7 +19,7 @@ function WhyPDFly() {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: .6 }}
         viewport={{ once: true }}
-        className="text-center max-w-3xl mx-auto"
+        className="text-center max-w-3xl mx-auto -mt-2"
       >
 
         <p className="text-purple-600 font-semibold uppercase tracking-[4px]">
@@ -43,7 +43,7 @@ function WhyPDFly() {
 
       {/* Cards */}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7 mt-20">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7 mt-12">
 
         {whyData.map((item, index) => (
 

@@ -1,118 +1,96 @@
-import { FaRobot } from "react-icons/fa";
-import { HiOutlineDocumentText } from "react-icons/hi";
-import { MdOutlineAutoGraph, MdTranslate } from "react-icons/md";
-import { BsQuestionCircle } from "react-icons/bs";
-import { TbNotes } from "react-icons/tb";
+import HeroDashboard from "./HeroDashboard";
+import HeroFloatingCard from "./HeroFloatingCard";
+import { floatingCards } from "./heroData";
 
 function Hero() {
   return (
-    <section className="relative w-full overflow-hidden px-5 sm:px-6 lg:px-10 xl:px-20 py-12 lg:py-20 flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-16">
-<div className="absolute right-0 top-0 w-64 h-64 sm:w-80 sm:h-80 bg-purple-300/30 blur-[120px] rounded-full"></div>
-<div className="absolute left-0 bottom-0 w-52 sm:w-60 h-52 sm:h-60 bg-pink-300/20 blur-[100px] rounded-full"></div>
-      {/* Left Side */}
-      <div className="w-full lg:max-w-[560px] text-center lg:text-left z-10">
-        <p className="text-purple-600 font-medium mb-4">
-          Next Generation PDF Platform
-        </p>
+    <section className="relative overflow-hidden bg-[#F8F5FF]">
 
-       <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight">
-        Smart PDF Tools.
-        <br />
-        <span className="text-purple-600">
-          Powered by AI.
-        </span>
-      </h1>
-<p className="mt-6 text-gray-600 text-base sm:text-lg lg:text-xl leading-8">
-        Summarize, chat, convert, edit and secure your PDFs.
-        All in one intelligent platform.
-      </p>
+      {/* Background */}
 
-      <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start w-full sm:w-auto">
-        <button className="bg-gradient-to-r from-purple-600 to-fuchsia-500 text-white w-full sm:w-auto px-8 py-4 rounded-full hover:scale-110 hover:shadow-xl transition-all duration-300">
-          Start Free
-        </button>
+      <div className="absolute top-0 right-0 w-[420px] h-[420px] rounded-full bg-violet-300/20 blur-[150px]" />
 
-        <button className="bg-white w-full sm:w-auto px-8 py-4 rounded-full shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-          Explore Features
-        </button> 
-      </div>
+      <div className="absolute bottom-0 left-0 w-[320px] h-[320px] rounded-full bg-pink-300/20 blur-[130px]" />
 
-    </div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] rounded-full bg-fuchsia-300/10 blur-[180px]" />
 
-    {/* Dashboard Wrapper */ }
-    <div className="relative w-full flex justify-center lg:justify-end overflow-hidden">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 py-20">
 
-      {/* Dashboard */ }
-      < div className="bg-white/80 backdrop-blur-xl border border-white/40 w-full max-w-[95%] sm:max-w-lg lg:max-w-[560px] rounded-[32px] shadow-[0_20px_60px_rgba(139,92,246,0.15)] p-5">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
 
-      <h2 className="text-2xl font-bold">
-        PDFly AI Dashboard
-      </h2>
+          {/* LEFT */}
 
-      <p className="text-gray-500 mt-2">
-        How can I help you today?
-      </p>
+          <div>
 
-      <div className="mt-5">
-        <input
-          type="text"
-          placeholder="Ask anything about your PDF..."
-          className="w-full border border-gray-200 p-4 rounded-xl outline-none focus:border-purple-500"
-        />
-      </div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/60 bg-white/80 backdrop-blur-xl px-5 py-2 shadow-md">
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-6">
+              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
 
-        <div className="border border-gray-100 rounded-2xl p-3 h-24 bg-white hover:bg-purple-50 hover:border-purple-200 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 cursor-pointer">
-          <FaRobot className="text-purple-600 text-lg mb-2" />
-          <h3 className="font-medium text-sm">Chat with PDF</h3>
-        </div>
+              <span className="font-semibold text-violet-700">
 
-        <div className="border border-gray-100 rounded-2xl p-3 h-24 bg-white hover:bg-purple-50 hover:border-purple-200 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 cursor-pointer">
-          <HiOutlineDocumentText className="text-purple-600 text-lg mb-2" />
-          <h3 className="font-medium text-sm">AI Summary</h3>
-        </div>
+                AI Powered PDF Platform
 
-        <div className="border border-gray-100 rounded-2xl p-3 h-24 bg-white hover:bg-purple-50 hover:border-purple-200 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 cursor-pointer">
-          <MdOutlineAutoGraph className="text-purple-600 text-lg mb-2" />
-          <h3 className="font-medium text-sm">PDF Mind Map</h3>
-        </div>
+              </span>
 
-        <div className="border border-gray-100 rounded-2xl p-3 h-24 bg-white hover:bg-purple-50 hover:border-purple-200 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 cursor-pointer">
-          <TbNotes className="text-purple-600 text-lg mb-2" />
-          <h3 className="font-medium text-sm">AI Notes</h3>
-        </div>
+            </div>
 
-        <div className="border border-gray-100 rounded-2xl p-3 h-24 bg-white hover:bg-purple-50 hover:border-purple-200 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 cursor-pointer">
-          <BsQuestionCircle className="text-purple-600 text-lg mb-2" />
-          <h3 className="font-medium text-sm">AI Q&A</h3>
-        </div>
+            <h1 className="mt-8 text-5xl lg:text-7xl font-black leading-[1.05] tracking-tight">
 
-        <div className="border border-gray-100 rounded-2xl p-3 h-24 bg-white hover:bg-purple-50 hover:border-purple-200 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 cursor-pointer">
-          <MdTranslate className="text-purple-600 text-lg mb-2" />
-          <h3 className="font-medium text-sm">Translate PDF</h3>
+              Smart PDF Tools.
+
+              <br />
+
+              <span className="bg-gradient-to-r from-violet-600 via-fuchsia-500 to-pink-500 bg-clip-text text-transparent">
+
+                Powered by AI.
+
+              </span>
+
+            </h1>
+
+            <p className="mt-8 max-w-xl text-lg leading-8 text-gray-600">
+
+              Summarize, chat, convert, edit and secure your PDFs using one intelligent AI platform.
+
+            </p>
+
+            <div className="mt-10 flex flex-wrap gap-4">
+
+              <button className="rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-500 px-8 py-4 font-semibold text-white shadow-xl hover:scale-105 transition">
+
+                Start Free
+
+              </button>
+
+              <button className="rounded-full bg-white px-8 py-4 font-semibold shadow-lg hover:-translate-y-1 transition">
+
+                Explore Features
+
+              </button>
+
+            </div>
+
+          </div>
+
+          {/* RIGHT */}
+
+          <div className="relative flex justify-center lg:justify-end">
+            <HeroDashboard />
+
+            {floatingCards.map((card, index) => (
+              <HeroFloatingCard
+                key={index}
+                card={card}
+              />
+            ))}
+
+          </div>
+
         </div>
 
       </div>
 
-    </div>
-
-    {/* Floating Cards */ }
-    < div className="hidden lg:flex absolute top-4 right-4 bg-white/90 backdrop-blur-xl px-4 py-2 rounded-2xl shadow-xl items-center">
-      ✨ AI Summary
-    </div>
-
-    <div className="hidden lg:flex absolute top-[66%] left-2 -translate-y-1/2 bg-white/90 backdrop-blur-xl px-5 py-3 rounded-2xl shadow-xl items-center gap-2 z-20">
-      🤖 Chat with PDF
-    </div>
-
-    <div className="hidden lg:flex absolute bottom-2 right-8 bg-white/90 backdrop-blur-xl px-5 py-3 rounded-2xl shadow-xl items-center">
-      🧠 PDF Mind Map
-    </div>
-
-  </div>
-
-    </section >
+    </section>
   );
 }
 

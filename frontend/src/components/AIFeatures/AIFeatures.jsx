@@ -3,7 +3,7 @@ import AIFeaturesCard from "./AIFeaturesCard";
 
 function AIFeatures() {
   return (
-    <section className="relative py-24 pb-36">
+    <section className="relative pt-4 pb-24 px-5 lg:px-12">
 
       {/* Background Blur */}
       <div className="absolute -left-20 top-10 w-72 h-72 bg-purple-300/20 blur-[120px] rounded-full" />
@@ -12,7 +12,7 @@ function AIFeatures() {
 
       {/* Heading */} 
 
-      <div className="text-center mb-16 px-5">
+      <div className="text-center mb-10 px-5">
 
         <p className="text-purple-600 font-semibold uppercase tracking-[3px]">
           AI Powered
@@ -30,7 +30,7 @@ function AIFeatures() {
       </div>
 
       {/* Marquee */}
-      <div className="relative overflow-x-hidden overflow-y-visible py-6">
+      <div className="relative overflow-hidden isolate">
 
         {/* Left Fade */}
         <div className="absolute left-0 top-0 z-20 h-full w-24 bg-gradient-to-r from-[#F8F5FF] to-transparent pointer-events-none"></div>
@@ -38,9 +38,7 @@ function AIFeatures() {
         {/* Right Fade */}
         <div className="absolute right-0 top-0 z-20 h-full w-24 bg-gradient-to-l from-[#F8F5FF] to-transparent pointer-events-none"></div>
 
-        <div className="marquee py-6">
-
-          <div className="marquee-content items-stretch">
+          <div className="marquee-content items-stretch relative z-10">
            {[...features, ...features].map((feature, index) => (
             <AIFeaturesCard
               key={index}
@@ -49,7 +47,7 @@ function AIFeatures() {
           ))}
         </div>
       </div>
-    </div>
+    
     </section>
   );
 }

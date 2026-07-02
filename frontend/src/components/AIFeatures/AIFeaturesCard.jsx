@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa";
 
- function AIFeaturesCard({ feature }) {
+function AIFeaturesCard({ feature }) {
   const navigate = useNavigate();
   const Icon = feature.icon;
 
@@ -11,7 +11,7 @@ import { FaArrowRight } from "react-icons/fa";
       group
       relative
       w-[250px]
-      h-[200px]
+      min-h-[200px]
       flex-shrink-0
       rounded-3xl
       bg-white/80
@@ -57,9 +57,9 @@ import { FaArrowRight } from "react-icons/fa";
 
         {/* Explore */}
         <button
-  onClick={() => navigate(`/features/${feature.slug}`)}
-  className="
-  mt-3
+          onClick={() => navigate(`/features/${feature.slug}`)}
+          className="
+  mt-2
   flex
   items-center
   gap-2
@@ -69,11 +69,11 @@ import { FaArrowRight } from "react-icons/fa";
   transition-all
   duration-300
 "
->
-  Explore
+        >
+          Explore
 
-  <FaArrowRight />
-</button>
+          <FaArrowRight />
+        </button>
 
       </div>
     </div>
