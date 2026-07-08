@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api/v1/pdf",
+  baseURL: "https://pdfly-w8rp.onrender.com/api/v1/pdf",
 });
 
 export const uploadPDF = async (file) => {
