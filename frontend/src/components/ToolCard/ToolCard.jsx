@@ -13,6 +13,7 @@ import {
   MdCompress,
   MdImage,
   MdCallSplit,
+  MdRotateRight,
 } from "react-icons/md";
 import { BsStars } from "react-icons/bs";
 
@@ -32,6 +33,10 @@ function ToolCard({ title, description, color, icon, slug }) {
 
     case "compress":
       IconComponent = MdCompress;
+      break;
+
+    case "rotate":
+      IconComponent = MdRotateRight;
       break;
 
     case "word":

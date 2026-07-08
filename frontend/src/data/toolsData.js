@@ -14,7 +14,7 @@ export const toolsData = [
     category: "PDF Essentials",
     color: "bg-blue-100 text-blue-600",
     icon: "split",
-    slug: "split-pdf"
+    slug: "split-pdf",
   },
   {
     title: "Compress PDF",
@@ -22,7 +22,15 @@ export const toolsData = [
     category: "PDF Essentials",
     color: "bg-green-100 text-green-600",
     icon: "compress",
-    slug: "compress-pdf"
+    slug: "compress-pdf",
+  },
+  {
+    title: "Rotate PDF",
+    description: "Rotate PDF pages by 90°, 180° or 270°.",
+    category: "PDF Essentials",
+    color: "bg-cyan-100 text-cyan-600",
+    icon: "rotate",
+    slug: "rotate-pdf",
   },
 
   // Convert PDF
@@ -32,7 +40,7 @@ export const toolsData = [
     category: "Convert PDF",
     color: "bg-blue-100 text-blue-600",
     icon: "word",
-    slug: "pdf-to-word"
+    slug: "pdf-to-word",
   },
   {
     title: "Image to PDF",
@@ -40,7 +48,7 @@ export const toolsData = [
     category: "Convert PDF",
     color: "bg-pink-100 text-pink-600",
     icon: "image",
-    slug: "image-to-pdf"
+    slug: "image-to-pdf",
   },
   {
     title: "PDF to Image",
@@ -48,7 +56,7 @@ export const toolsData = [
     category: "Convert PDF",
     color: "bg-orange-100 text-orange-600",
     icon: "pdfimage",
-    slug: "pdf-to-image"
+    slug: "pdf-to-image",
   },
 
   // Security
@@ -58,7 +66,7 @@ export const toolsData = [
     category: "Security",
     color: "bg-purple-100 text-purple-600",
     icon: "protect",
-    slug: "protect-pdf"
+    slug: "protect-pdf",
   },
   {
     title: "Unlock PDF",
@@ -66,7 +74,7 @@ export const toolsData = [
     category: "Security",
     color: "bg-green-100 text-green-600",
     icon: "unlock",
-    slug: "unlock-pdf"
+    slug: "unlock-pdf",
   },
   {
     title: "Watermark PDF",
@@ -74,7 +82,7 @@ export const toolsData = [
     category: "Security",
     color: "bg-cyan-100 text-cyan-600",
     icon: "watermark",
-    slug: "watermark-pdf"
+    slug: "watermark-pdf",
   },
 
   // AI Tools
@@ -84,7 +92,7 @@ export const toolsData = [
     category: "AI Tools",
     color: "bg-purple-100 text-purple-600",
     icon: "chat",
-    slug: "chat-with-pdf"
+    slug: "chat-with-pdf",
   },
   {
     title: "AI Summary",
@@ -92,7 +100,7 @@ export const toolsData = [
     category: "AI Tools",
     color: "bg-orange-100 text-orange-600",
     icon: "summary",
-    slug: "ai-summary"
+    slug: "ai-summary",
   },
   {
     title: "PDF Mind Map",
@@ -100,6 +108,6 @@ export const toolsData = [
     category: "AI Tools",
     color: "bg-pink-100 text-pink-600",
     icon: "mindmap",
-    slug: "pdf-mind-map"
+    slug: "pdf-mind-map",
   },
 ];

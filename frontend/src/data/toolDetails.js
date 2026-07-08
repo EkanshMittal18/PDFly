@@ -83,6 +83,34 @@ export const toolDetails = {
 ]
 },
 
+"rotate-pdf": {
+  title: "Rotate PDF",
+  description: "Rotate PDF pages by 90°, 180° or 270°.",
+  uploadText: "Upload a PDF file to rotate.",
+  whyUse: "Why Use Rotate PDF?",
+  allowDuplicateFiles: false,
+  actionButton: "Rotate PDF",
+
+  features: [
+    {
+      title: "🔄 Rotate Pages",
+      description: "Rotate PDF pages in seconds.",
+    },
+    {
+      title: "📄 Correct Orientation",
+      description: "Fix scanned or sideways PDFs.",
+    },
+    {
+      title: "⚡ Fast Processing",
+      description: "Rotate without losing quality.",
+    },
+    {
+      title: "🔒 Secure",
+      description: "Your files remain private.",
+    },
+  ],
+},
+
  "pdf-to-word": {
     title: "PDF to Word",
     description: "Convert PDF files into editable Word documents.",
@@ -116,7 +144,7 @@ export const toolDetails = {
     description: "Convert images into PDF files.",
     uploadText: "Upload images to convert into PDF.",
     whyUse: "Why Use Image to PDF?",
-    allowDuplicateFiles: false,
+    allowDuplicateFiles: true,
     actionButton: "Convert to PDF",
 
     features: [

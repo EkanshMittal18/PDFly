@@ -1,12 +1,29 @@
+import toast from "react-hot-toast";
+import Footer from "../../components/Footer/Footer";
+import Advertisement from "../../components/Advertisement/Advertisement";
 import { toolDetails } from "../../data/toolDetails";
-import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
+import ToolHeader from "../../components/ToolPage/ToolHeader/ToolHeader";
+import Stats from "../../components/ToolPage/Stats/Stats";
+import FileList from "../../components/ToolPage/FileList/FileList";
+import ActionButton from "../../components/ToolPage/ActionButton/ActionButton";
+import UploadZone from "../../components/ToolPage/UploadZone/UploadZone";
+import {
+  mergePDF,
+  splitPDF,
+  compressPDF,
+  rotatePDF,
+  imageToPDF,
+  watermarkPDF,
+} from "../../services/pdf.service";
+import Navbar from "../../components/Navbar/Navbar";
+import Breadcrumb from "../../components/ToolPage/Breadcrumb/Breadcrumb";
 
 function ToolPage() {
   const { slug } = useParams();
-  const navigate = useNavigate();
-  
+
+
   const tool = toolDetails[slug];
   if (!tool) {
     return <h1>Tool Not Found</h1>;
@@ -15,353 +32,552 @@ function ToolPage() {
   const [showDuplicateModal, setShowDuplicateModal] = useState(false);
   const [duplicateFile, setDuplicateFile] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [startPage, setStartPage] = useState(1);
 
-const handleAddDuplicate = () => {
+  const [endPage, setEndPage] = useState(1);
+  const [rotation, setRotation] = useState(90);
+const [watermark, setWatermark] = useState("");
 
-  setFiles((prev) => [
-    ...prev,
-    duplicateFile
-  ]);
+  {/*const [isLoading, setIsLoading] = useState(false);*/}
 
-  setShowDuplicateModal(false);
+  const handleAddDuplicate = () => {
 
-  setDuplicateFile(null);
+    setFiles((prev) => [
+      ...prev,
+      duplicateFile
+    ]);
 
-};
+    setShowDuplicateModal(false);
 
-  return (
-    <div className="relative min-h-screen bg-[#F8F5FF] px-12 py-10 overflow-hidden">
+    setDuplicateFile(null);
 
-     
+  };
+  const handleMergePDF = async () => {
+    if (files.length < 2) {
+      toast.error("Please select at least 2 PDF files.");
+      return;
+    }
+    setIsLoading(true);
+    try {
+      console.log("Merge Started...");
 
+      const blob = await mergePDF(files);
 
+      const url = window.URL.createObjectURL(blob);
 
-      
-{showDuplicateModal && (
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "merged.pdf";
 
-  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+      document.body.appendChild(a);
+      a.click();
 
-    <div className="bg-white rounded-3xl p-8 w-[450px] shadow-2xl">
+      a.remove();
 
-      <h2 className="text-2xl font-bold mb-3">
-        Duplicate File Detected
-      </h2>
+      window.URL.revokeObjectURL(url);
 
-      <p className="text-gray-500">
-        {duplicateFile?.name} is already uploaded.
-      </p>
+      toast.success("Your merged PDF is ready!");
+      setIsLoading(false);
 
-      <p className="text-gray-500 mt-2">
-        Do you want to add it again?
-      </p>
+    } catch (error) {
+      console.error(error);
+      setIsLoading(false);
 
-      <div className="flex justify-end gap-4 mt-8">
+      toast.error("Something went wrong. Please try again.");
+    }
+  };
+  const handleSplitPDF = async () => {
 
-        <button
-          onClick={() => {
-            setShowDuplicateModal(false);
-            setDuplicateFile(null);
-          }}
-          className="px-5 py-2 border rounded-xl"
-        >
-          Cancel
-        </button>
+    if (files.length < 1) {
+      toast.error("Please select a PDF.");
+      return;
+    }
 
-        <button
-          onClick={handleAddDuplicate}
-          className="px-5 py-2 bg-purple-600 text-white rounded-xl"
-        >
-          Add Again
-        </button>
+    if (startPage > endPage) {
+      toast.error("Invalid page range.");
+      return;
+    }
 
-      </div>
+    setIsLoading(true);
 
-    </div>
+    try {
 
-  </div>
+      const blob = await splitPDF(
+        files[0],
+        startPage,
+        endPage
+      );
 
-)}
-<div>
+      const url = window.URL.createObjectURL(blob);
 
-  <button 
-  onClick={() => navigate("/")}
-  className="text-purple-600 font-medium mb-4"
-  >
-    ← Back To Tools
-  </button>
+      const a = document.createElement("a");
 
-  <h1 className="text-5xl font-bold">
-   {tool?.title}
-  </h1>
+      a.href = url;
+      a.download = "split.pdf";
 
-  <p className="text-gray-500 mt-4 text-lg">
-    {tool?.description}
-  </p>
+      document.body.appendChild(a);
 
-</div>
+      a.click();
 
+      a.remove();
 
-{/* Main Content */}
+      window.URL.revokeObjectURL(url);
 
-<div className="grid grid-cols-3 gap-8 mt-12">
+      toast.success("PDF Split Successfully ✅");
 
-  {/* Left Side */}
+    } catch (error) {
 
-  <div className="col-span-2">
+      toast.error("Split Failed ❌");
 
-    {/* Upload Box */}
+    } finally {
 
-    <div
-  onDragOver={(e) => {
-    e.preventDefault();
-    setIsDragging(true);
-  }}
-  onDragLeave={() => {
-    setIsDragging(false);
-  }}
-  onDrop={(e) => {
-    e.preventDefault();
-    setIsDragging(false);
+      setIsLoading(false);
 
-    const droppedFiles = Array.from(e.dataTransfer.files);
+    }
 
-    const pdfFiles = droppedFiles.filter(
-      (file) => file.type === "application/pdf"
-    );
+  };
+  const handleCompressPDF = async () => {
 
-    setFiles((prev) => [...prev, ...pdfFiles]);
-  }}
-  className={`rounded-3xl border-2 border-dashed p-16 text-center shadow-[0_20px_60px_rgba(139,92,246,0.15)] transition-all ${
-    isDragging
-      ? "bg-purple-50 border-purple-600"
-      : "bg-white border-purple-300"
-  }`}
->
-      <div className="text-6xl mb-4">
-        📄
-      </div>
+    if (files.length < 1) {
+      toast.error("Please select a PDF.");
+      return;
+    }
 
-      <h2 className="text-2xl font-semibold">
-        {isDragging
-  ? "Drop PDF Files Here"
-  : "Drag & Drop PDF Files"}
-      </h2>
+    setIsLoading(true);
 
-      <p className="text-gray-500 mt-3">
-        {tool?.uploadText}
-      </p>
+    try {
 
-<input
-  type="file"
-  multiple
-  accept=".pdf"
-  id="pdfUpload"
-  className="hidden"
-  onChange={(e) => {
-    console.log("FILE SELECTED");
-  const selectedFiles = Array.from(e.target.files);
+      const blob = await compressPDF(
+        files[0]
+      );
 
-  const duplicate = selectedFiles.find((newFile) =>
-    files.some(
-      (file) =>
-        file.name === newFile.name &&
-        file.size === newFile.size &&
-        file.lastModified === newFile.lastModified
-    )
-  );
+      const url = window.URL.createObjectURL(blob);
 
-  if (duplicate) {
-    console.log("DUPLICATE DETECTED");
-    setDuplicateFile(duplicate);
-    setShowDuplicateModal(true);
+      const a = document.createElement("a");
+
+      a.href = url;
+      a.download = "compressed.pdf";
+
+      document.body.appendChild(a);
+
+      a.click();
+
+      a.remove();
+
+      window.URL.revokeObjectURL(url);
+
+      toast.success("PDF Compressed Successfully ✅");
+
+    } catch (error) {
+
+      toast.error("Compression Failed ❌");
+
+    } finally {
+
+      setIsLoading(false);
+
+    }
+
+  };
+  const handleRotatePDF = async () => {
+  if (files.length < 1) {
+    toast.error("Please select a PDF.");
     return;
   }
 
-  setFiles((prevFiles) => [
-    ...prevFiles,
-    ...selectedFiles,
-  ]);
-  e.target.value = null;
+  setIsLoading(true);
 
-}}
-/>
+  try {
+    const blob = await rotatePDF(files[0], rotation);
 
-      <button
-  onClick={() =>
-    document.getElementById("pdfUpload").click()
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "rotated.pdf";
+
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    window.URL.revokeObjectURL(url);
+
+    toast.success("PDF Rotated Successfully ✅");
+  } catch (error) {
+    toast.error("Rotation Failed ❌");
+  } finally {
+    setIsLoading(false);
   }
-  className="mt-6 bg-purple-600 text-white px-8 py-3 rounded-full hover:bg-purple-700 transition"
->
-  {files.length > 0
-  ? "+ Add More Files"
-  : "Select PDF Files"}
-</button>
+};
+const handleImageToPDF = async () => {
+  if (files.length < 1) {
+    toast.error("Please select images.");
+    return;
+  }
 
-    </div>
+  setIsLoading(true);
 
-<div className="grid grid-cols-2 gap-4 mt-6">
+  try {
+    const blob = await imageToPDF(files);
 
-  <div className="bg-white rounded-2xl p-5 shadow-sm">
+    const url = window.URL.createObjectURL(blob);
 
-    <p className="text-gray-500 text-sm">
-      Files Selected
-    </p>
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "images.pdf";
 
-    <h3 className="text-3xl font-bold mt-2">
-      {files.length}
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    window.URL.revokeObjectURL(url);
+
+    toast.success("PDF Created Successfully ✅");
+  } catch (error) {
+    toast.error("Conversion Failed ❌");
+  } finally {
+    setIsLoading(false);
+  }
+};
+const handleWatermarkPDF = async () => {
+  if (files.length < 1) {
+    toast.error("Please select a PDF.");
+    return;
+  }
+
+  if (!watermark.trim()) {
+    toast.error("Please enter watermark text.");
+    return;
+  }
+
+  setIsLoading(true);
+
+  try {
+    const blob = await watermarkPDF(files[0], watermark);
+
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "watermarked.pdf";
+
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    window.URL.revokeObjectURL(url);
+
+    toast.success("Watermark Added Successfully ✅");
+  } catch (error) {
+    toast.error("Watermark Failed ❌");
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+  return (
+    <div className="relative min-h-screen bg-[#F8F5FF] px-4 sm:px-6 lg:px-12 pt-4 lg:pt-6 pb-8 overflow-hidden">
+
+      <Navbar />
+
+      <div className="max-w-7xl mx-auto py-8 lg:py-10">
+
+        {showDuplicateModal && (
+
+
+
+          <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+
+            <div className="bg-white rounded-3xl p-8 w-[450px] shadow-2xl">
+
+              <h2 className="text-2xl font-bold mb-3">
+                Duplicate File Detected
+              </h2>
+
+              <p className="text-gray-500">
+                {duplicateFile?.name} is already uploaded.
+              </p>
+
+              <p className="text-gray-500 mt-2">
+                Do you want to add it again?
+              </p>
+
+              <div className="flex justify-end gap-4 mt-8">
+
+                <button
+                  onClick={() => {
+                    setShowDuplicateModal(false);
+                    setDuplicateFile(null);
+                  }}
+                  className="px-5 py-2 border rounded-xl"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  onClick={handleAddDuplicate}
+                  className="px-5 py-2 bg-purple-600 text-white rounded-xl"
+                >
+                  Add Again
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        )}
+
+        <Breadcrumb title={tool?.title} />
+
+
+        <ToolHeader
+          title={tool?.title}
+          description={tool?.description}
+        />
+
+        {/* Main Content */}
+
+        <div className="grid grid-cols-1 lg:grid-cols-[2fr_0.9fr] gap-6 mt-10 items-start">
+
+          {/* Left Side */}
+
+          <div className="w-full">
+
+            <UploadZone
+              isDragging={isDragging}
+              tool={tool}
+              files={files}
+              onDragOver={(e) => {
+                e.preventDefault();
+                setIsDragging(true);
+              }}
+              onDragLeave={() => {
+                setIsDragging(false);
+              }}
+              onDrop={(e) => {
+                e.preventDefault();
+                setIsDragging(false);
+
+                const droppedFiles = Array.from(e.dataTransfer.files);
+
+                const pdfFiles = droppedFiles.filter(
+                  (file) => file.type === "application/pdf"
+                );
+
+                if (slug === "merge-pdf") {
+                  setFiles((prev) => [...prev, ...pdfFiles]);
+                } else {
+                  setFiles(pdfFiles.slice(0, 1));
+                }
+              }}
+              onFileChange={(e) => {
+                const selectedFiles = Array.from(e.target.files);
+
+                const duplicate = selectedFiles.find((newFile) =>
+                  files.some(
+                    (file) =>
+                      file.name === newFile.name &&
+                      file.size === newFile.size &&
+                      file.lastModified === newFile.lastModified
+                  )
+                );
+
+                if (duplicate) {
+                  setDuplicateFile(duplicate);
+                  setShowDuplicateModal(true);
+                  return;
+                }
+
+                if (slug === "merge-pdf") {
+                  setFiles((prevFiles) => [
+                    ...prevFiles,
+                    ...selectedFiles,
+                  ]);
+                } else {
+                  setFiles(selectedFiles.slice(0, 1));
+                }
+
+                e.target.value = null;
+              }}
+            />
+            <Stats files={files} />
+            {/* Uploaded Files */}
+
+            <FileList files={files} setFiles={setFiles} />
+
+            {slug === "split-pdf" && (
+              <div className="mt-5 rounded-2xl bg-white p-5 shadow-sm">
+
+                <h3 className="mb-4 text-lg font-semibold">
+                  Select Page Range
+                </h3>
+
+                <div className="grid grid-cols-2 gap-4">
+
+                  <div>
+
+                    <label className="mb-2 block text-sm font-medium">
+                      From Page
+                    </label>
+
+                    <input
+                      type="number"
+                      min="1"
+                      value={startPage}
+                      onChange={(e) =>
+                        setStartPage(Number(e.target.value))
+                      }
+                      className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-violet-500"
+                    />
+
+                  </div>
+
+                  <div>
+
+                    <label className="mb-2 block text-sm font-medium">
+                      To Page
+                    </label>
+
+                    <input
+                      type="number"
+                      min="1"
+                      value={endPage}
+                      onChange={(e) =>
+                        setEndPage(Number(e.target.value))
+                      }
+                      className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-violet-500"
+                    />
+
+                  </div>
+
+                </div>
+
+              </div>
+            )}
+            {slug === "rotate-pdf" && (
+  <div className="mt-5 rounded-2xl bg-white p-5 shadow-sm">
+
+    <h3 className="mb-4 text-lg font-semibold">
+      Select Rotation
     </h3>
 
+    <div className="flex gap-4">
+
+      {[90, 180, 270].map((value) => (
+
+        <button
+          key={value}
+          onClick={() => setRotation(value)}
+          className={`rounded-xl border px-5 py-3 transition ${
+            rotation === value
+              ? "border-violet-600 bg-violet-600 text-white"
+              : "border-gray-300"
+          }`}
+        >
+          {value}°
+        </button>
+
+      ))}
+
+    </div>
+
   </div>
+)}
+{slug === "watermark-pdf" && (
+  <div className="mt-5 rounded-2xl bg-white p-5 shadow-sm">
 
-  <div className="bg-white rounded-2xl p-5 shadow-sm">
-
-    <p className="text-gray-500 text-sm">
-      Total Size
-    </p>
-
-    <h3 className="text-3xl font-bold mt-2">
-
-      {(
-        files.reduce(
-          (total, file) => total + file.size,
-          0
-        ) /
-        1024 /
-        1024
-      ).toFixed(2)}{" "}
-      MB
-
+    <h3 className="mb-4 text-lg font-semibold">
+      Watermark Text
     </h3>
 
-  </div>
-
-</div>
-
-    {/* Uploaded Files */}
-
-<div className="bg-white rounded-3xl p-6 mt-6">
-
-  <h3 className="text-xl font-bold mb-4">
-    Recent Files
-  </h3>
-
-  <div className="space-y-3">
-
-  {files.length === 0 ? (
-
-    <p className="text-gray-400">
-      No files selected yet.
-    </p>
-
-  ) : (
-
-    files.map((file, index) => (
-
-  <div
-    key={index}
-    className="flex justify-between items-center border rounded-xl p-4 hover:bg-gray-50 transition"
-  >
-
-    <div>
-
-      <p className="font-medium">
-        📄 {file.name}
-      </p>
-
-      <p className="text-sm text-gray-500">
-        {(file.size / 1024 / 1024).toFixed(2)} MB
-      </p>
-
-    </div>
-
-    <button
-      onClick={() =>
-        setFiles(
-          files.filter((_, i) => i !== index)
-        )
-      }
-      className="text-red-500 hover:text-red-700 text-xl"
-    >
-      ✕
-    </button>
+    <input
+      type="text"
+      value={watermark}
+      onChange={(e) => setWatermark(e.target.value)}
+      placeholder="Enter watermark (Example: CONFIDENTIAL)"
+      className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-violet-500"
+    />
 
   </div>
+)}
 
-))
+<ActionButton
+  slug={slug}
+  files={files}
+  actionButton={tool?.actionButton}
+  onClick={
+    slug === "merge-pdf"
+      ? handleMergePDF
+      : slug === "split-pdf"
+      ? handleSplitPDF
+      : slug === "compress-pdf"
+      ? handleCompressPDF
+      : slug === "rotate-pdf"
+      ? handleRotatePDF
+      : slug === "image-to-pdf"
+      ? handleImageToPDF
+      : slug === "watermark-pdf"
+      ? handleWatermarkPDF
+      : () => {}
+  }
+/>
+            <Advertisement />
+          </div>
 
-  )}
 
-</div> 
-</div>   {/* YE NAYA ADD KARNA HAI */}
+          {/* Right Side */}
 
-<div className="bg-white rounded-3xl p-6 mt-6">
+          <div>
 
-  <button
-    disabled={
-  slug === "merge-pdf"
-    ? files.length < 2
-    : files.length < 1
-}
-    className={`w-full py-4 rounded-2xl font-semibold text-lg transition ${
-      files.length < 2
-        ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-        : "bg-purple-600 text-white hover:bg-purple-700"
-    }`}
-  >
-    {tool?.actionButton}
-  </button>
+            <div className="bg-white rounded-3xl p-6 shadow-sm">
 
-</div>
-</div>
+              <h3 className="font-bold text-xl mb-6">
+                {tool?.whyUse}
+              </h3>
 
- 
+              <div className="space-y-5">
 
-  {/* Right Side */}
+                <div className="space-y-5">
 
-  <div>
+                  {tool?.features?.map((feature, index) => (
 
-    <div className="bg-white rounded-3xl p-6 shadow-sm">
+                    <div key={index}>
 
-      <h3 className="font-bold text-xl mb-6">
-        {tool?.whyUse}
-      </h3>
+                      <h4 className="font-semibold">
+                        {feature.title}
+                      </h4>
 
-      <div className="space-y-5">
+                      <p className="text-gray-500 text-sm">
+                        {feature.description}
+                      </p>
 
-        <div className="space-y-5">
+                    </div>
 
-  {tool?.features?.map((feature, index) => (
+                  ))}
 
-    <div key={index}>
+                </div>
 
-      <h4 className="font-semibold">
-        {feature.title}
-      </h4>
+              </div>
 
-      <p className="text-gray-500 text-sm">
-        {feature.description}
-      </p>
+            </div>
 
-    </div>
+          </div>
 
-  ))}
-
-</div>
+        </div>
+        <Footer />
 
       </div>
 
     </div>
 
-  </div>
 
-</div>
 
-      </div>
-
-    
   );
 
-  
+
 }
 
 export default ToolPage;

@@ -32,16 +32,16 @@ export const socialLinks = [
   {
     id: 1,
     icon: FaGithub,
-    url: "https://github.com/yourusername",
+    url: "https://github.com/EkanshMittal18",
   },
   {
     id: 2,
     icon: FaLinkedin,
-    url: "https://linkedin.com/in/yourusername",
+    url: "https://www.linkedin.com/in/ekansh-mittal-76b84b320/",
   },
   {
     id: 3,
     icon: FaInstagram,
-    url: "https://instagram.com/yourusername",
+    url: "https://instagram.com/ekanshmittal__",
   },
 ];

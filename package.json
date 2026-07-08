@@ -1,5 +1,9 @@
 {
   "dependencies": {
-    "framer-motion": "^12.42.0"
+    "@hello-pangea/dnd": "^18.0.1",
+    "framer-motion": "^12.42.0",
+    "multer": "^2.2.0",
+    "pdf-lib": "^1.17.1",
+    "react-hot-toast": "^2.6.0"
   }
 }
