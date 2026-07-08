@@ -4,7 +4,6 @@ import { PDFDocument , degrees, rgb, StandardFonts, } from "pdf-lib";
 import { exec } from "child_process";
 import { promisify } from "util";
 import sharp from "sharp";
-import poppler from "pdf-poppler";
 import { createRequire } from "module";
 
 const require = createRequire(import.meta.url);
@@ -343,62 +342,62 @@ export const watermarkPDFService = async (
 
 };
 
-export const pdfToImageService = async (file) => {
+// export const pdfToImageService = async (file) => {
 
-  if (!file) {
-    throw new Error("Please upload a PDF.");
-  }
+//   if (!file) {
+//     throw new Error("Please upload a PDF.");
+//   }
 
-  const outputFolder = "src/outputs";
+//   const outputFolder = "src/outputs";
 
-  if (!fs.existsSync(outputFolder)) {
-    fs.mkdirSync(outputFolder, { recursive: true });
-  }
+//   if (!fs.existsSync(outputFolder)) {
+//     fs.mkdirSync(outputFolder, { recursive: true });
+//   }
 
-  const imageFolder = path.join(
-    outputFolder,
-    `images-${Date.now()}`
-  );
+//   const imageFolder = path.join(
+//     outputFolder,
+//     `images-${Date.now()}`
+//   );
 
-  fs.mkdirSync(imageFolder, { recursive: true });
+//   fs.mkdirSync(imageFolder, { recursive: true });
 
-  const options = {
-    format: "png",
-    out_dir: imageFolder,
-    out_prefix: "page",
-    page: null,
-  };
+//   const options = {
+//     format: "png",
+//     out_dir: imageFolder,
+//     out_prefix: "page",
+//     page: null,
+//   };
 
-  await poppler.convert(file.path, options);
+//   await poppler.convert(file.path, options);
 
-  const zipPath = path.join(
-    outputFolder,
-    `images-${Date.now()}.zip`
-  );
+//   const zipPath = path.join(
+//     outputFolder,
+//     `images-${Date.now()}.zip`
+//   );
 
-  await new Promise((resolve, reject) => {
+//   await new Promise((resolve, reject) => {
 
-    const output = fs.createWriteStream(zipPath);
+//     const output = fs.createWriteStream(zipPath);
 
-    const archive = archiver("zip", {
-      zlib: { level: 9 },
-    });
+//     const archive = archiver("zip", {
+//       zlib: { level: 9 },
+//     });
 
-    output.on("close", resolve);
+//     output.on("close", resolve);
 
-    archive.on("error", reject);
+//     archive.on("error", reject);
 
-    archive.pipe(output);
+//     archive.pipe(output);
 
-    archive.directory(
-      imageFolder,
-      false
-    );
+//     archive.directory(
+//       imageFolder,
+//       false
+//     );
 
-    archive.finalize();
+//     archive.finalize();
 
-  });
+//   });
 
-  return zipPath;
+//   return zipPath;
 
-};
+// };
