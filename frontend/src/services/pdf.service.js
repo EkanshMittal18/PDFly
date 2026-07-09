@@ -3,6 +3,7 @@ import axios from "axios";
 const API = axios.create({
   baseURL: "https://pdfly-w8rp.onrender.com/api/v1/pdf",
 });
+ export default API;
 
 export const uploadPDF = async (file) => {
   const formData = new FormData();
