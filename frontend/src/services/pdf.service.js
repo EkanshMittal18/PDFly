@@ -166,5 +166,3 @@ export const watermarkPDF = async (
   return response.data;
 
 };
-
-export default API;

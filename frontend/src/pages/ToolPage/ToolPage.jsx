@@ -25,19 +25,21 @@ function ToolPage() {
 
 
   const tool = toolDetails[slug];
-  if (!tool) {
-    return <h1>Tool Not Found</h1>;
-  }
   const [files, setFiles] = useState([]);
   const [showDuplicateModal, setShowDuplicateModal] = useState(false);
   const [duplicateFile, setDuplicateFile] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [startPage, setStartPage] = useState(1);
-
   const [endPage, setEndPage] = useState(1);
   const [rotation, setRotation] = useState(90);
-const [watermark, setWatermark] = useState("");
+  const [watermark, setWatermark] = useState("");
+
+  if (!tool) {
+    return <h1>Tool Not Found</h1>;
+  }
+
+
 
   {/*const [isLoading, setIsLoading] = useState(false);*/}
 
