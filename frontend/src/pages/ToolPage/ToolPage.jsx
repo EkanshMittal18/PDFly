@@ -34,6 +34,7 @@ function ToolPage() {
   const [endPage, setEndPage] = useState(1);
   const [rotation, setRotation] = useState(90);
   const [watermark, setWatermark] = useState("");
+  const [outputFileName, setOutputFileName] = useState("");
 
   if (!tool) {
     return <h1>Tool Not Found</h1>;
@@ -44,6 +45,20 @@ function ToolPage() {
   {/*const [isLoading, setIsLoading] = useState(false);*/}
 
   const handleAddDuplicate = () => {
+    const validateFileName = () => {
+  if (!outputFileName.trim()) {
+    return true;
+  }
+
+  if (/[\\/:*?"<>|]/.test(outputFileName)) {
+    toast.error(
+      'File name cannot contain \\ / : * ? " < > |'
+    );
+    return false;
+  }
+
+  return true;
+};
 
     setFiles((prev) => [
       ...prev,
@@ -56,6 +71,7 @@ function ToolPage() {
 
   };
   const handleMergePDF = async () => {
+    if (!validateFileName()) return;
     if (files.length < 2) {
       toast.error("Please select at least 2 PDF files.");
       return;
@@ -70,7 +86,12 @@ function ToolPage() {
 
       const a = document.createElement("a");
       a.href = url;
-      a.download = "merged.pdf";
+      const fileName =
+  outputFileName.trim() || `merged_${Date.now()}`;
+
+a.download = fileName.endsWith(".pdf")
+  ? fileName
+  : `${fileName}.pdf`;
 
       document.body.appendChild(a);
       a.click();
@@ -80,6 +101,7 @@ function ToolPage() {
       window.URL.revokeObjectURL(url);
 
       toast.success("Your merged PDF is ready!");
+      setOutputFileName("");
       setIsLoading(false);
 
     } catch (error) {
@@ -93,6 +115,7 @@ function ToolPage() {
 }
   };
   const handleSplitPDF = async () => {
+    if (!validateFileName()) return;
 
     if (files.length < 1) {
       toast.error("Please select a PDF.");
@@ -119,7 +142,12 @@ function ToolPage() {
       const a = document.createElement("a");
 
       a.href = url;
-      a.download = "split.pdf";
+      const fileName =
+  outputFileName.trim() || `split_${Date.now()}`;
+
+a.download = fileName.endsWith(".pdf")
+  ? fileName
+  : `${fileName}.pdf`;
 
       document.body.appendChild(a);
 
@@ -130,6 +158,7 @@ function ToolPage() {
       window.URL.revokeObjectURL(url);
 
       toast.success("PDF Split Successfully ✅");
+      setOutputFileName("");
 
     } catch (error) {
 
@@ -143,6 +172,7 @@ function ToolPage() {
 
   };
   const handleCompressPDF = async () => {
+    if (!validateFileName()) return;
 
     if (files.length < 1) {
       toast.error("Please select a PDF.");
@@ -162,7 +192,12 @@ function ToolPage() {
       const a = document.createElement("a");
 
       a.href = url;
-      a.download = "compressed.pdf";
+      const fileName =
+  outputFileName.trim() || `compressed_${Date.now()}`;
+
+a.download = fileName.endsWith(".pdf")
+  ? fileName
+  : `${fileName}.pdf`;
 
       document.body.appendChild(a);
 
@@ -173,6 +208,7 @@ function ToolPage() {
       window.URL.revokeObjectURL(url);
 
       toast.success("PDF Compressed Successfully ✅");
+      setOutputFileName("");
 
     } catch (error) {
 
@@ -186,6 +222,7 @@ function ToolPage() {
 
   };
   const handleRotatePDF = async () => {
+    if (!validateFileName()) return;
   if (files.length < 1) {
     toast.error("Please select a PDF.");
     return;
@@ -200,7 +237,12 @@ function ToolPage() {
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = "rotated.pdf";
+    const fileName =
+  outputFileName.trim() || `rotated_${Date.now()}`;
+
+a.download = fileName.endsWith(".pdf")
+  ? fileName
+  : `${fileName}.pdf`;
 
     document.body.appendChild(a);
     a.click();
@@ -209,6 +251,7 @@ function ToolPage() {
     window.URL.revokeObjectURL(url);
 
     toast.success("PDF Rotated Successfully ✅");
+    setOutputFileName("");
   } catch (error) {
     toast.error("Rotation Failed ❌");
   } finally {
@@ -216,6 +259,7 @@ function ToolPage() {
   }
 };
 const handleImageToPDF = async () => {
+  if (!validateFileName()) return;
   if (files.length < 1) {
     toast.error("Please select images.");
     return;
@@ -230,7 +274,12 @@ const handleImageToPDF = async () => {
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = "images.pdf";
+   const fileName =
+  outputFileName.trim() || `images_${Date.now()}`;
+
+a.download = fileName.endsWith(".pdf")
+  ? fileName
+  : `${fileName}.pdf`;
 
     document.body.appendChild(a);
     a.click();
@@ -239,6 +288,7 @@ const handleImageToPDF = async () => {
     window.URL.revokeObjectURL(url);
 
     toast.success("PDF Created Successfully ✅");
+    setOutputFileName("");
   } catch (error) {
     toast.error("Conversion Failed ❌");
   } finally {
@@ -246,6 +296,7 @@ const handleImageToPDF = async () => {
   }
 };
 const handleWatermarkPDF = async () => {
+  if (!validateFileName()) return;
   if (files.length < 1) {
     toast.error("Please select a PDF.");
     return;
@@ -265,7 +316,12 @@ const handleWatermarkPDF = async () => {
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = "watermarked.pdf";
+    const fileName =
+  outputFileName.trim() || `watermarked_${Date.now()}`;
+
+a.download = fileName.endsWith(".pdf")
+  ? fileName
+  : `${fileName}.pdf`;
 
     document.body.appendChild(a);
     a.click();
@@ -274,6 +330,7 @@ const handleWatermarkPDF = async () => {
     window.URL.revokeObjectURL(url);
 
     toast.success("Watermark Added Successfully ✅");
+    setOutputFileName("");
   } catch (error) {
     toast.error("Watermark Failed ❌");
   } finally {
@@ -352,6 +409,24 @@ const handleWatermarkPDF = async () => {
           <div className="w-full">
 
             <UploadZone
+            title={
+  slug === "image-to-pdf"
+    ? "Drag & Drop Images"
+    : "Drag & Drop PDF Files"
+}
+
+description={
+  slug === "image-to-pdf"
+    ? "Upload your images here or click the button below."
+    : "Upload your PDF files here or click the button below."
+}
+
+buttonText={
+  slug === "image-to-pdf"
+    ? "Select Images"
+    : "Select PDF Files"
+}
+
               isDragging={isDragging}
               tool={tool}
               files={files}
@@ -525,6 +600,26 @@ const handleWatermarkPDF = async () => {
   </div>
 )}
 
+<div className="mt-5 rounded-2xl bg-white p-5 shadow-sm">
+
+  <h3 className="mb-3 text-lg font-semibold">
+    Output File Name
+  </h3>
+
+  <input
+    type="text"
+    value={outputFileName}
+    onChange={(e) => setOutputFileName(e.target.value)}
+    placeholder="Leave blank to auto generate"
+    className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-violet-500"
+  />
+
+  <p className="mt-2 text-sm text-gray-500">
+    💡 Leave blank to automatically generate a unique filename.
+  </p>
+
+</div>
+
 <ActionButton
   slug={slug}
   files={files}
@@ -544,6 +639,7 @@ const handleWatermarkPDF = async () => {
       ? handleWatermarkPDF
       : () => {}
   }
+  isLoading={isLoading}
 />
             <Advertisement />
           </div>

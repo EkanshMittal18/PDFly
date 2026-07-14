@@ -13,9 +13,9 @@ function ActionButton({
         onClick={onClick}
         disabled={
           isLoading ||
-            slug === "merge-pdf"
+            (slug === "merge-pdf"
             ? files.length < 2
-            : files.length < 1
+            : files.length < 1)
         }
         className={`w-full rounded-2xl py-3 lg:py-4 text-base lg:text-lg font-semibold shadow-lg transition-all duration-300  ${(slug === "merge-pdf"
           ? files.length < 2
@@ -25,14 +25,28 @@ function ActionButton({
           }`}
       >
         {isLoading ? (
-          <span className="flex items-center justify-center gap-2">
+          <span className="flex items-center justify-center gap-2 animate-pulse">
 
             <Loader2
               size={20}
               className="animate-spin"
             />
 
-            Merging PDFs...
+            {
+  slug === "merge-pdf"
+    ? "Merging PDFs..."
+    : slug === "split-pdf"
+    ? "Splitting PDF..."
+    : slug === "compress-pdf"
+    ? "Compressing PDF..."
+    : slug === "rotate-pdf"
+    ? "Rotating PDF..."
+    : slug === "image-to-pdf"
+    ? "Creating PDF..."
+    : slug === "watermark-pdf"
+    ? "Adding Watermark..."
+    : "Processing..."
+}
 
           </span>
         ) : (

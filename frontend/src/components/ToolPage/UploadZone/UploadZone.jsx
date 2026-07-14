@@ -66,16 +66,18 @@ const UploadZone = ({
       <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm text-gray-500">
 
         <span className="rounded-full bg-violet-50 px-3 py-1">
-  📄 PDF Only
+  {accept === "image/*"
+    ? "🖼 JPG, PNG, WEBP"
+    : "📄 PDF Only"}
 </span>
 
 <span className="rounded-full bg-violet-50 px-3 py-1">
-  📦 Max Size: 100 MB
+  {multiple
+    ? "📂 Multiple Files"
+    : "📄 Single File"}
 </span>
 
-<span className="rounded-full bg-violet-50 px-3 py-1">
-  📑 Max Files: 20
-</span>
+
 
       </div>
 
