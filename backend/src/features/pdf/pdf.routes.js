@@ -6,7 +6,7 @@ import {
   splitPDF,
   compressPDF,
   imageToPDF,
-  // pdfToImage,
+  pdfToImage,
   rotatePDF,
   watermarkPDF,
 } from "./pdf.controller.js";
@@ -27,7 +27,7 @@ router.post("/compress", upload.single("pdf"), compressPDF);
 
 router.post("/image-to-pdf", upload.array("images", 20), imageToPDF);
 
-// router.post("/pdf-to-image", upload.single("pdf"), pdfToImage);
+router.post("/pdf-to-image", upload.single("pdf"), pdfToImage);
 
 router.post("/rotate", upload.single("pdf"), rotatePDF);
 

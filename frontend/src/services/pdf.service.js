@@ -166,3 +166,24 @@ export const watermarkPDF = async (
   return response.data;
 
 };
+
+export const pdfToImage = async (file) => {
+
+  const formData = new FormData();
+
+  formData.append("pdf", file);
+
+  const response = await API.post(
+    "/pdf-to-image",
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      responseType: "blob",
+    }
+  );
+
+  return response.data;
+
+};

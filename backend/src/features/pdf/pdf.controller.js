@@ -4,7 +4,7 @@ import {
   splitPDFService,
   compressPDFService,
   imageToPDFService,
-  // pdfToImageService,
+  pdfToImageService,
   rotatePDFService,
   watermarkPDFService,
 } from "./pdf.service.js";
@@ -214,3 +214,28 @@ export const watermarkPDF = async (req, res) => {
 
 // }
 // };
+
+export const pdfToImage = async (req, res) => {
+  try {
+
+    const outputPath = await pdfToImageService(
+      req.file
+    );
+
+    return downloadFile(
+      res,
+      outputPath,
+      "images.zip"
+    );
+
+  } catch (error) {
+
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+
+  }
+};

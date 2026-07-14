@@ -16,6 +16,7 @@ import {
   rotatePDF,
   imageToPDF,
   watermarkPDF,
+  pdfToImage,
 } from "../../services/pdf.service";
 import Navbar from "../../components/Navbar/Navbar";
 import Breadcrumb from "../../components/ToolPage/Breadcrumb/Breadcrumb";
@@ -44,21 +45,21 @@ function ToolPage() {
 
   {/*const [isLoading, setIsLoading] = useState(false);*/}
 
-  const handleAddDuplicate = () => {
-    const validateFileName = () => {
-  if (!outputFileName.trim()) {
-    return true;
-  }
-
-  if (/[\\/:*?"<>|]/.test(outputFileName)) {
-    toast.error(
-      'File name cannot contain \\ / : * ? " < > |'
-    );
-    return false;
-  }
-
+  const validateFileName = () => {
+if (!outputFileName.trim()) {
   return true;
+}
+
+if (/[\\/:*?"<>|]/.test(outputFileName)) {
+  toast.error(
+    'File name cannot contain \\ / : * ? " < > |'
+  );
+  return false;
+}
+
+return true;
 };
+  const handleAddDuplicate = () => {
 
     setFiles((prev) => [
       ...prev,
@@ -259,6 +260,7 @@ a.download = fileName.endsWith(".pdf")
   }
 };
 const handleImageToPDF = async () => {
+
   if (!validateFileName()) return;
   if (files.length < 1) {
     toast.error("Please select images.");
@@ -294,6 +296,60 @@ a.download = fileName.endsWith(".pdf")
   } finally {
     setIsLoading(false);
   }
+};
+
+const handlePDFToImage = async () => {
+
+  if (files.length < 1) {
+    toast.error("Please select a PDF file.");
+    return;
+  }
+
+  if (!validateFileName()) return;
+
+  setIsLoading(true);
+
+  try {
+
+    const blob = await pdfToImage(files[0]);
+
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+
+    a.href = url;
+
+    const fileName =
+      outputFileName.trim() || `images_${Date.now()}`;
+
+    a.download = fileName.endsWith(".zip")
+      ? fileName
+      : `${fileName}.zip`;
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    a.remove();
+
+    window.URL.revokeObjectURL(url);
+
+    toast.success("Images downloaded successfully!");
+
+    setOutputFileName("");
+
+  } catch (error) {
+
+    console.error(error);
+
+    toast.error("Something went wrong.");
+
+  } finally {
+
+    setIsLoading(false);
+
+  }
+
 };
 const handleWatermarkPDF = async () => {
   if (!validateFileName()) return;
@@ -412,18 +468,24 @@ a.download = fileName.endsWith(".pdf")
             title={
   slug === "image-to-pdf"
     ? "Drag & Drop Images"
+    : slug === "pdf-to-image"
+    ? "Drag & Drop PDF File"
     : "Drag & Drop PDF Files"
 }
 
 description={
   slug === "image-to-pdf"
     ? "Upload your images here or click the button below."
+    : slug === "pdf-to-image"
+    ? "Upload your PDF here to convert every page into images."
     : "Upload your PDF files here or click the button below."
 }
 
 buttonText={
   slug === "image-to-pdf"
     ? "Select Images"
+    : slug === "pdf-to-image"
+    ? "Select PDF"
     : "Select PDF Files"
 }
 
@@ -635,6 +697,8 @@ buttonText={
       ? handleRotatePDF
       : slug === "image-to-pdf"
       ? handleImageToPDF
+      : slug === "pdf-to-image"
+      ? handlePDFToImage
       : slug === "watermark-pdf"
       ? handleWatermarkPDF
       : () => {}

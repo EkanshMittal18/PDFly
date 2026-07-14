@@ -11,6 +11,7 @@ import sharp from "sharp";
 const tempPdfFolder = path.join("src", "temp", "pdf");
 const imageFolder = path.join("src", "temp", "images");
 const outputFolder = path.join("src", "temp", "output");
+const pdfToImageFolder = path.join("src", "temp", "pdf-to-image");
 
 const execAsync = promisify(exec);
 
@@ -340,6 +341,63 @@ export const watermarkPDFService = async (
   );
 
   return outputPath;
+
+};
+
+export const pdfToImageService = async (file) => {
+
+  if (!file) {
+    throw new Error("Please upload a PDF.");
+  }
+
+  if (!fs.existsSync(pdfToImageFolder)) {
+    fs.mkdirSync(pdfToImageFolder, {
+      recursive: true,
+    });
+  }
+
+  const zipPath = path.join(
+    outputFolder,
+    `images-${Date.now()}.zip`
+  );
+
+  const output = fs.createWriteStream(zipPath);
+
+  const archive = archiver("zip", {
+    zlib: { level: 9 },
+  });
+
+  archive.pipe(output);
+
+  const document = await pdf(file.path, {
+    scale: 3,
+  });
+
+  let pageNumber = 1;
+
+  for await (const image of document) {
+
+    archive.append(image, {
+      name: `page-${pageNumber}.png`,
+    });
+
+    pageNumber++;
+
+  }
+
+  await document.destroy();
+
+  await archive.finalize();
+
+  await new Promise((resolve, reject) => {
+
+    output.on("close", resolve);
+
+    output.on("error", reject);
+
+  });
+
+  return zipPath;
 
 };
 
