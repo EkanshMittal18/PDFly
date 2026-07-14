@@ -1,15 +1,16 @@
 import fs from "fs";
 import path from "path";
+import archiver from "archiver";
+import { pdf } from "pdf-to-img";
 import { PDFDocument , degrees, rgb, StandardFonts, } from "pdf-lib";
 import { exec } from "child_process";
 import { promisify } from "util";
 import sharp from "sharp";
-import { createRequire } from "module";
 
-const require = createRequire(import.meta.url);
 
-const archiverModule = require("archiver");
-const archiver = archiverModule.default || archiverModule;
+const tempPdfFolder = path.join("src", "temp", "pdf");
+const imageFolder = path.join("src", "temp", "images");
+const outputFolder = path.join("src", "temp", "output");
 
 const execAsync = promisify(exec);
 
@@ -342,62 +343,3 @@ export const watermarkPDFService = async (
 
 };
 
-// export const pdfToImageService = async (file) => {
-
-//   if (!file) {
-//     throw new Error("Please upload a PDF.");
-//   }
-
-//   const outputFolder = "src/outputs";
-
-//   if (!fs.existsSync(outputFolder)) {
-//     fs.mkdirSync(outputFolder, { recursive: true });
-//   }
-
-//   const imageFolder = path.join(
-//     outputFolder,
-//     `images-${Date.now()}`
-//   );
-
-//   fs.mkdirSync(imageFolder, { recursive: true });
-
-//   const options = {
-//     format: "png",
-//     out_dir: imageFolder,
-//     out_prefix: "page",
-//     page: null,
-//   };
-
-//   await poppler.convert(file.path, options);
-
-//   const zipPath = path.join(
-//     outputFolder,
-//     `images-${Date.now()}.zip`
-//   );
-
-//   await new Promise((resolve, reject) => {
-
-//     const output = fs.createWriteStream(zipPath);
-
-//     const archive = archiver("zip", {
-//       zlib: { level: 9 },
-//     });
-
-//     output.on("close", resolve);
-
-//     archive.on("error", reject);
-
-//     archive.pipe(output);
-
-//     archive.directory(
-//       imageFolder,
-//       false
-//     );
-
-//     archive.finalize();
-
-//   });
-
-//   return zipPath;
-
-// };

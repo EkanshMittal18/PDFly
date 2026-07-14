@@ -12,7 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "archiver": "^8.0.0",
+    "archiver": "^7.0.1",
     "bcryptjs": "^3.0.3",
     "compression": "^1.8.1",
     "cookie-parser": "^1.4.7",
@@ -26,6 +26,7 @@
     "morgan": "^1.11.0",
     "multer": "^2.2.0",
     "pdf-lib": "^1.17.1",
+    "pdf-to-img": "^6.2.0",
     "sharp": "^0.35.3"
   },
   "devDependencies": {

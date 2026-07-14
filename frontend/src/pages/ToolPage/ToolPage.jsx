@@ -83,11 +83,14 @@ function ToolPage() {
       setIsLoading(false);
 
     } catch (error) {
-      console.error(error);
-      setIsLoading(false);
+  console.error("Merge Error:", error);
+  console.error("Response:", error.response);
+  console.error("Data:", error.response?.data);
 
-      toast.error("Something went wrong. Please try again.");
-    }
+  setIsLoading(false);
+
+  toast.error(error.message);
+}
   };
   const handleSplitPDF = async () => {
 
@@ -365,18 +368,34 @@ const handleWatermarkPDF = async () => {
 
                 const droppedFiles = Array.from(e.dataTransfer.files);
 
-                const pdfFiles = droppedFiles.filter(
-                  (file) => file.type === "application/pdf"
-                );
+                const validFiles =
+  slug === "image-to-pdf"
+    ? droppedFiles.filter((file) =>
+        file.type.startsWith("image/")
+      )
+    : droppedFiles.filter(
+        (file) => file.type === "application/pdf"
+      );
 
-                if (slug === "merge-pdf") {
-                  setFiles((prev) => [...prev, ...pdfFiles]);
+                if (slug === "merge-pdf"||
+                  slug === "image-to-pdf"
+                ) {
+                  setFiles((prev) => [...prev, ...validFiles]);
                 } else {
-                  setFiles(pdfFiles.slice(0, 1));
+                  setFiles(validFiles.slice(0, 1));
                 }
               }}
               onFileChange={(e) => {
                 const selectedFiles = Array.from(e.target.files);
+
+                const validFiles =
+  slug === "image-to-pdf"
+    ? selectedFiles.filter((file) =>
+        file.type.startsWith("image/")
+      )
+    : selectedFiles.filter(
+        (file) => file.type === "application/pdf"
+      );
 
                 const duplicate = selectedFiles.find((newFile) =>
                   files.some(
@@ -393,13 +412,13 @@ const handleWatermarkPDF = async () => {
                   return;
                 }
 
-                if (slug === "merge-pdf") {
+                if (slug === "merge-pdf"||slug === "image-to-pdf") {
                   setFiles((prevFiles) => [
                     ...prevFiles,
-                    ...selectedFiles,
+                    ...validFiles
                   ]);
                 } else {
-                  setFiles(selectedFiles.slice(0, 1));
+                  setFiles(validFiles.slice(0, 1));
                 }
 
                 e.target.value = null;

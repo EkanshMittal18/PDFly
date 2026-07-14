@@ -18,9 +18,20 @@ const app = express();
 app.use(helmet());
 
 // CORS
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://pdfly-mauve.vercel.app",
+];
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
