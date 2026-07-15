@@ -33,4 +33,16 @@ router.post("/rotate", upload.single("pdf"), rotatePDF);
 
 router.post("/watermark", upload.single("pdf"), watermarkPDF);
 
+router.get("/test", (req, res) => {
+  res.json({
+    message: "GET Route Working"
+  });
+});
+
+router.post("/test", (req, res) => {
+  res.json({
+    message: "POST Route Working"
+  });
+});
+
 export default router;
