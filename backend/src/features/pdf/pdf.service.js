@@ -356,6 +356,18 @@ export const pdfToImageService = async (file) => {
     });
   }
 
+  if (!fs.existsSync(outputFolder)) {
+  fs.mkdirSync(outputFolder, {
+    recursive: true,
+  });
+}
+
+if (!fs.existsSync(outputFolder)) {
+  fs.mkdirSync(outputFolder, {
+    recursive: true,
+  });
+}
+
   const zipPath = path.join(
     outputFolder,
     `images-${Date.now()}.zip`
