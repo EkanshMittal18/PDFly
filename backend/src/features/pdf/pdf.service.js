@@ -413,3 +413,25 @@ if (!fs.existsSync(outputFolder)) {
 
 };
 
+export const protectPDFService = async (file, password) => {
+if (!file) {
+  throw new Error("Please upload a PDF file.");
+}
+
+const inputPath = file.path;
+
+const outputPath = path.join(
+  outputFolder,
+  `protected-${Date.now()}.pdf`
+);
+
+// Make sure output folder exists
+fs.mkdirSync(outputFolder, {
+  recursive: true,
+});
+const command = `qpdf --encrypt "${password}" "${password}" 256 -- "${inputPath}" "${outputPath}"`;
+
+await execAsync(command);
+
+return outputPath;
+};

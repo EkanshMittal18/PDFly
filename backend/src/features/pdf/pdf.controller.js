@@ -7,6 +7,7 @@ import {
   pdfToImageService,
   rotatePDFService,
   watermarkPDFService,
+  protectPDFService,
 } from "./pdf.service.js";
 import downloadFile from "../../utils/downloadFile.js";
 export const uploadPDF = async (req, res) => {
@@ -226,6 +227,42 @@ export const pdfToImage = async (req, res) => {
       res,
       outputPath,
       "images.zip"
+    );
+
+  } catch (error) {
+
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+
+  }
+};
+
+export const protectPDF = async (req, res) => {
+  console.log("✅ Protect PDF Controller Hit");
+  try {
+
+    const { password } = req.body;
+
+    if (!password) {
+      return res.status(400).json({
+        success: false,
+        message: "Password is required.",
+      });
+    }
+
+    const outputPath = await protectPDFService(
+      req.file,
+      password
+    );
+
+    return downloadFile(
+      res,
+      outputPath,
+      "protected.pdf"
     );
 
   } catch (error) {

@@ -17,9 +17,11 @@ import {
   imageToPDF,
   watermarkPDF,
   pdfToImage,
+  protectPDF,
 } from "../../services/pdf.service";
 import Navbar from "../../components/Navbar/Navbar";
 import Breadcrumb from "../../components/ToolPage/Breadcrumb/Breadcrumb";
+import FloatingInput from "../../components/common/FloatingInput";
 
 function ToolPage() {
   const { slug } = useParams();
@@ -36,6 +38,14 @@ function ToolPage() {
   const [rotation, setRotation] = useState(90);
   const [watermark, setWatermark] = useState("");
   const [outputFileName, setOutputFileName] = useState("");
+  const [password, setPassword] = useState("");
+const [confirmPassword, setConfirmPassword] = useState("");
+const passwordsMatch =
+  password === confirmPassword &&
+  password.length > 0;
+
+const [showPassword, setShowPassword] = useState(false);
+const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   if (!tool) {
     return <h1>Tool Not Found</h1>;
@@ -394,6 +404,70 @@ a.download = fileName.endsWith(".pdf")
   }
 };
 
+const handleProtectPDF = async () => {
+  try {
+    if (!files.length) {
+      toast.error("Please select a PDF file.");
+      return;
+    }
+
+    if (!password) {
+      toast.error("Please enter a password.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match.");
+      return;
+    }
+
+    setIsLoading(true);
+
+    const blob = await protectPDF(
+  files[0],
+  password,
+  outputFileName
+);
+
+const url = window.URL.createObjectURL(blob);
+
+const a = document.createElement("a");
+a.href = url;
+
+const fileName =
+  outputFileName.trim() || `protected_${Date.now()}`;
+
+a.download = fileName.endsWith(".pdf")
+  ? fileName
+  : `${fileName}.pdf`;
+
+document.body.appendChild(a);
+a.click();
+a.remove();
+
+window.URL.revokeObjectURL(url);
+
+toast.success("PDF Protected Successfully ✅");
+
+setOutputFileName("");
+
+  } catch (error) {
+
+    console.error(error);
+
+    toast.error(
+      error?.response?.data?.message ||
+      "Failed to protect PDF."
+    );
+
+  } finally {
+
+    setIsLoading(false);
+
+  }
+};
+
+
   return (
     <div className="relative min-h-screen bg-[#F8F5FF] px-4 sm:px-6 lg:px-12 pt-4 lg:pt-6 pb-8 overflow-hidden">
 
@@ -662,6 +736,74 @@ buttonText={
   </div>
 )}
 
+{slug === "protect-pdf" && (
+  <div className="mt-8 rounded-3xl border border-violet-100 bg-white p-8 shadow-lg">
+
+    <div className="mb-6">
+      <h3 className="text-2xl font-bold text-gray-900">
+        🔒 Protect Your PDF
+      </h3>
+
+      <p className="mt-2 text-gray-500">
+        Set a strong password to keep your PDF secure from unauthorized access.
+      </p>
+    </div>
+
+    <div className="space-y-5">
+
+      <FloatingInput
+        label="Password"
+        type={showPassword ? "text" : "password"}
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        showPassword={showPassword}
+        togglePassword={() => setShowPassword(!showPassword)}
+      />
+
+      <FloatingInput
+        label="Confirm Password"
+        type={showConfirmPassword ? "text" : "password"}
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+        showPassword={showConfirmPassword}
+        togglePassword={() =>
+          setShowConfirmPassword(!showConfirmPassword)
+        }
+      />
+
+      {confirmPassword.length > 0 && (
+  <div className="mt-2 flex items-center gap-2 text-sm">
+
+    {passwordsMatch ? (
+      <>
+        <span className="text-green-600 font-medium">
+          ✅ Passwords Match
+        </span>
+      </>
+    ) : (
+      <>
+        <span className="text-red-600 font-medium">
+          ❌ Passwords Don't Match
+        </span>
+      </>
+    )}
+
+  </div>
+)}
+
+      <div className="rounded-2xl bg-violet-50 p-4">
+        <p className="text-sm text-gray-600">
+          🔐 Your password will be required every time this PDF is opened.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+)}
+
+
+
 <div className="mt-5 rounded-2xl bg-white p-5 shadow-sm">
 
   <h3 className="mb-3 text-lg font-semibold">
@@ -701,6 +843,8 @@ buttonText={
       ? handlePDFToImage
       : slug === "watermark-pdf"
       ? handleWatermarkPDF
+      : slug === "protect-pdf"
+      ? handleProtectPDF
       : () => {}
   }
   isLoading={isLoading}

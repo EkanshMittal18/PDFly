@@ -59,3 +59,15 @@ body,
   }
 
 }
+
+/* Hide Microsoft Edge password reveal button */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none !important;
+}
+
+/* Hide Chromium (Edge) reveal icon */
+input::-webkit-credentials-auto-fill-button {
+  visibility: hidden;
+  display: none !important;
+}

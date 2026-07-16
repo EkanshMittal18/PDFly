@@ -111,3 +111,4 @@ export const toolsData = [
     slug: "pdf-mind-map",
   },
 ];
+

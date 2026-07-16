@@ -187,3 +187,32 @@ export const pdfToImage = async (file) => {
   return response.data;
 
 };
+
+export const protectPDF = async (
+  file,
+  password,
+  outputFileName
+) => {
+
+  const formData = new FormData();
+
+  formData.append("pdf", file);
+  formData.append("password", password);
+
+  if (outputFileName) {
+    formData.append("outputFileName", outputFileName);
+  }
+
+  const response = await API.post(
+    "/protect",
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      responseType: "blob",
+    }
+  );
+
+  return response.data;
+};

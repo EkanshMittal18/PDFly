@@ -9,6 +9,7 @@ import {
   pdfToImage,
   rotatePDF,
   watermarkPDF,
+  protectPDF,
 } from "./pdf.controller.js";
 
 const router = express.Router();
@@ -32,6 +33,8 @@ router.post("/pdf-to-image", upload.single("pdf"), pdfToImage);
 router.post("/rotate", upload.single("pdf"), rotatePDF);
 
 router.post("/watermark", upload.single("pdf"), watermarkPDF);
+
+router.post("/protect", upload.single("pdf"), protectPDF);
 
 router.get("/test", (req, res) => {
   res.json({
