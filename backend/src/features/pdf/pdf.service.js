@@ -163,10 +163,12 @@ export const compressPDFService = async (
   const pdfSetting =
     qualityMap[quality] || "/ebook";
 
-  const gsPath =
-  '"C:\\Program Files\\gs\\gs10.07.1\\bin\\gswin64c.exe"';
+  const gsCommand =
+  process.platform === "win32"
+    ? '"C:\\Program Files\\gs\\gs10.07.1\\bin\\gswin64c.exe"'
+    : "gs";
 
-const command = `${gsPath} \
+const command = `${gsCommand} \
 -sDEVICE=pdfwrite \
 -dCompatibilityLevel=1.4 \
 -dPDFSETTINGS=${pdfSetting} \
@@ -187,7 +189,6 @@ export const imageToPDFService = async (files) => {
     throw new Error("Please upload at least one image.");
   }
 
-  const outputFolder = "src/outputs";
 
   if (!fs.existsSync(outputFolder)) {
     fs.mkdirSync(outputFolder, { recursive: true });
