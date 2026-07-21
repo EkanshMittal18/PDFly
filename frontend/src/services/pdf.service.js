@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://pdfly-w8rp.onrender.com/api/v1/pdf",
+  baseURL: "https://pdfly-docker.onrender.com/api/v1/pdf",
 });
  export default API;
 
