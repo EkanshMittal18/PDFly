@@ -436,3 +436,30 @@ await execAsync(command);
 
 return outputPath;
 };
+
+export const unlockPDFService = async (file, password) => {
+  if (!file) {
+    throw new Error("Please upload a PDF file.");
+  }
+
+  if (!password) {
+    throw new Error("Password is required.");
+  }
+
+  const inputPath = file.path;
+
+  fs.mkdirSync(outputFolder, {
+    recursive: true,
+  });
+
+  const outputPath = path.join(
+    outputFolder,
+    `unlocked-${Date.now()}.pdf`
+  );
+
+  const command = `qpdf --decrypt --password="${password}" "${inputPath}" "${outputPath}"`;
+
+  await execAsync(command);
+
+  return outputPath;
+};

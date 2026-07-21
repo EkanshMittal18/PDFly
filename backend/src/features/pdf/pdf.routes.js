@@ -10,6 +10,7 @@ import {
   rotatePDF,
   watermarkPDF,
   protectPDF,
+  unlockPDF,
 } from "./pdf.controller.js";
 
 const router = express.Router();
@@ -35,6 +36,7 @@ router.post("/rotate", upload.single("pdf"), rotatePDF);
 router.post("/watermark", upload.single("pdf"), watermarkPDF);
 
 router.post("/protect", upload.single("pdf"), protectPDF);
+router.post("/unlock", upload.single("pdf"), unlockPDF);
 
 router.get("/test", (req, res) => {
   res.json({

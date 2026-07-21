@@ -8,6 +8,8 @@ import {
   rotatePDFService,
   watermarkPDFService,
   protectPDFService,
+  unlockPDFService,
+
 } from "./pdf.service.js";
 import downloadFile from "../../utils/downloadFile.js";
 export const uploadPDF = async (req, res) => {
@@ -274,5 +276,26 @@ export const protectPDF = async (req, res) => {
       message: error.message,
     });
 
+  }
+};
+
+export const unlockPDF = async (req, res, next) => {
+  try {
+    console.log("🔓 Unlock PDF Controller Hit");
+
+    const { password } = req.body;
+
+    const outputPath = await unlockPDFService(
+      req.file,
+      password
+    );
+
+    return downloadFile(
+      res,
+      outputPath,
+      "unlocked.pdf"
+    );
+  } catch (error) {
+    next(error);
   }
 };

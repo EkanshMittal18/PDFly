@@ -216,3 +216,23 @@ export const protectPDF = async (
 
   return response.data;
 };
+
+export const unlockPDF = async (file, password) => {
+  const formData = new FormData();
+
+  formData.append("pdf", file);
+  formData.append("password", password);
+
+  const response = await API.post(
+    "/unlock",
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      responseType: "blob",
+    }
+  );
+
+  return response.data;
+};

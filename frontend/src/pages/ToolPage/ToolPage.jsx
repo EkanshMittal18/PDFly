@@ -18,6 +18,7 @@ import {
   watermarkPDF,
   pdfToImage,
   protectPDF,
+  unlockPDF,
 } from "../../services/pdf.service";
 import Navbar from "../../components/Navbar/Navbar";
 import Breadcrumb from "../../components/ToolPage/Breadcrumb/Breadcrumb";
@@ -467,6 +468,57 @@ setOutputFileName("");
   }
 };
 
+const handleUnlockPDF = async () => {
+  try {
+    if (!password.trim()) {
+      alert("Please enter PDF password.");
+      return;
+    }
+
+    setIsLoading(true);
+
+    const blob = await unlockPDF(
+      files[0],
+      password
+    );
+
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+
+    a.href = url;
+
+    const fileName =
+      outputFileName.trim() ||
+      `unlocked_${Date.now()}`;
+
+    a.download = fileName.endsWith(".pdf")
+      ? fileName
+      : `${fileName}.pdf`;
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    a.remove();
+
+    window.URL.revokeObjectURL(url);
+
+    setOutputFileName("");
+    setPassword("");
+    setConfirmPassword("");
+
+  } catch (error) {
+    console.error(error);
+
+    alert(
+      error?.response?.data?.message ||
+      "Failed to unlock PDF."
+    );
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="relative min-h-screen bg-[#F8F5FF] px-4 sm:px-6 lg:px-12 pt-4 lg:pt-6 pb-8 overflow-hidden">
@@ -802,6 +854,42 @@ buttonText={
   </div>
 )}
 
+{slug === "unlock-pdf" && (
+  <div className="mt-8 rounded-3xl border border-orange-100 bg-white p-8 shadow-lg">
+
+    <div className="mb-6">
+      <h3 className="text-2xl font-bold text-gray-900">
+        🔓 Unlock Your PDF
+      </h3>
+
+      <p className="mt-2 text-gray-500">
+        Enter the password used to protect your PDF.
+      </p>
+    </div>
+
+    <div className="space-y-5">
+
+      <FloatingInput
+        label="PDF Password"
+        type={showPassword ? "text" : "password"}
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        showPassword={showPassword}
+        togglePassword={() =>
+          setShowPassword(!showPassword)
+        }
+      />
+
+      <div className="rounded-2xl bg-orange-50 p-4">
+        <p className="text-sm text-gray-600">
+          🔓 Enter the correct password to permanently remove protection from your PDF.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+)}
 
 
 <div className="mt-5 rounded-2xl bg-white p-5 shadow-sm">
@@ -845,6 +933,8 @@ buttonText={
       ? handleWatermarkPDF
       : slug === "protect-pdf"
       ? handleProtectPDF
+      : slug === "unlock-pdf"
+      ? handleUnlockPDF
       : () => {}
   }
   isLoading={isLoading}
